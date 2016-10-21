@@ -29,7 +29,7 @@ public class JSONTo {
             JSONObject eventJSON = array.getJSONObject(i);
 
             Set<String> interests = new HashSet<>();
-            for(int j = 0; j < eventJSON.getJSONArray("interests").length(); j++) {
+            for(int j = 0; j < eventJSON.getJSONArray("interests").length() - 1; j++) {
                 JSONObject interestJSON = eventJSON.getJSONArray("interests").getJSONObject(i);
                 interests.add(interestJSON.getString("name"));
             }

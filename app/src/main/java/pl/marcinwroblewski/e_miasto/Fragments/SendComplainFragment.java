@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -136,8 +135,8 @@ public class SendComplainFragment extends Fragment implements LocationListener {
 
         ArrayList<Complain> complainArrayList = new ArrayList<>();
 
-        BitmapsStorage bitmapsStorage = new BitmapsStorage(getContext());
-        String imagePath = bitmapsStorage.saveToInternalStorage(BitmapFactory.decodeResource(getResources(), R.drawable.jbie), "complain");
+//        BitmapsStorage bitmapsStorage = new BitmapsStorage(getContext());
+//        String imagePath = bitmapsStorage.saveToInternalStorage(BitmapFactory.decodeResource(getResources(), R.drawable.jbie), "complain");
 
 //        for(int i = 0; i < 50; i++) {
 //            Complain complain = new Complain(
@@ -298,9 +297,9 @@ public class SendComplainFragment extends Fragment implements LocationListener {
             Requests requests = new Requests(login, password);
 
             String allComplainsResponse = requests.getAllComplains();
-            Log.d("Personal party", allComplainsResponse);
 
             if(allComplainsResponse == null) return null;
+                Log.d("Personal party", allComplainsResponse);
 
             try {
                 JSONArray complainsJSON = new JSONArray(allComplainsResponse);

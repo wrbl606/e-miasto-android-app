@@ -154,9 +154,9 @@ public class ActivitiesFragment extends Fragment {
             Requests requests = new Requests(login, password);
 
             String allPersonalizedPartiesResponse = requests.getPersonalizedParties();
-            Log.d("Personal party", allPersonalizedPartiesResponse);
 
             if(allPersonalizedPartiesResponse == null) return null;
+            Log.d("Personal party", allPersonalizedPartiesResponse);
 
             try {
                 JSONArray eventsJSON = new JSONArray(allPersonalizedPartiesResponse);

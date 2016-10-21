@@ -338,7 +338,9 @@ public class Requests {
 		    connection.setRequestProperty("Authorization", getBasicAuth());
 		   
 		    connection.setUseCaches(false);
-		   
+
+            Log.d("All complains", "Response: " + connection.getResponseCode() + " : " + connection.getResponseMessage());
+
 		    //Get Response  
 		    InputStream is = connection.getInputStream();
 		    BufferedReader rd = new BufferedReader(new InputStreamReader(is));
