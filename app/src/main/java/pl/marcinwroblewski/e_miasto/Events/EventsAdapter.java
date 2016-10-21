@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -61,7 +61,10 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
         holder.title.setText(album.getName());
 
         // loading album cover using Glide library
-        Glide.with(mContext).load(album.getImage()).into(holder.mainImage);
+        //Glide.with(mContext).load(album.getImage()).into(holder.mainImage);
+
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        imageLoader.displayImage(album.getImage(), holder.mainImage);
 
         holder.share.setOnClickListener(new View.OnClickListener() {
             @Override

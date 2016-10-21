@@ -1,6 +1,5 @@
-package pl.marcinwroblewski.e_miasto;
+package pl.marcinwroblewski.e_miasto.Complains;
 
-import java.io.File;
 import java.util.Date;
 
 /**
@@ -11,16 +10,16 @@ public class Complain {
 
     private long id;
     private String title, content;
-    private File photo;
+    private String photoPath;
     private boolean accepted;
     private Date dateCreated, dateSolved;
 
 
-    public Complain(long id, String title, String content, File photo, boolean accepted, Date dateCreated, Date dateSolved) {
+    public Complain(long id, String title, String content, String photoPath, boolean accepted, Date dateCreated, Date dateSolved) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.photo = photo;
+        this.photoPath = photoPath;
         this.accepted = accepted;
         this.dateCreated = dateCreated;
         this.dateSolved = dateSolved;
@@ -50,12 +49,12 @@ public class Complain {
         this.content = content;
     }
 
-    public File getPhoto() {
-        return photo;
+    public String getPhoto() {
+        return photoPath;
     }
 
-    public void setPhoto(File photo) {
-        this.photo = photo;
+    public void setPhoto(String photoPath) {
+        this.photoPath = photoPath;
     }
 
     public boolean isAccepted() {

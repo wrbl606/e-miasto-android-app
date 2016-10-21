@@ -4,19 +4,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.tangxiaolv.telegramgallery.GalleryActivity;
 
 import java.util.List;
@@ -65,6 +66,11 @@ public class MainActivity extends AppCompatActivity implements
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_thumb_up_white_24dp);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_chat_white_24dp);
+
+
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .build();
+        ImageLoader.getInstance().init(config);
     }
 
 

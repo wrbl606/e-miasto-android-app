@@ -1,4 +1,4 @@
-package pl.marcinwroblewski.e_miasto;
+package pl.marcinwroblewski.e_miasto.Complains;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,11 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
 import pl.marcinwroblewski.e_miasto.Activities.ComplainDetailsActivity;
+import pl.marcinwroblewski.e_miasto.R;
 
 /**
  * Created by wrbl on 19.10.16.
@@ -60,7 +61,11 @@ public class ComplainAdapter extends RecyclerView.Adapter<ComplainAdapter.MyView
         holder.title.setText(complain.getTitle());
 
         // loading album cover using Glide library
-        Glide.with(mContext).load(complain.getPhoto()).into(holder.mainImage);
+        //Glide.with(mContext).load(complain.getPhoto()).into(holder.mainImage);
+
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        imageLoader.displayImage(complain.getPhoto(), holder.mainImage);
+
 
         holder.share.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,4 +1,4 @@
-package pl.marcinwroblewski.e_miasto;
+package pl.marcinwroblewski.e_miasto.Complains;
 
 import android.content.Context;
 
@@ -22,10 +22,18 @@ public class ComplainsStorage {
         JSONObject complainJSON = new JSONObject();
         complainJSON.put("id", complain.getId());
         complainJSON.put("title", complain.getTitle());
-        complainJSON.put("imageLocal", complain.getPhoto().getAbsoluteFile().toString());
+        complainJSON.put("imagePath", complain.getPhoto());
         complainJSON.put("content", complain.getContent());
-        complainJSON.put("dateCreated", complain.getDateCreated().getTime());
-        complainJSON.put("dateSolved", complain.getDateSolved().getTime());
+
+        if(complain.getDateCreated() != null)
+            complainJSON.put("dateCreated", complain.getDateCreated().getTime());
+        else
+            complainJSON.put("dateCreated", 0);
+        if(complain.getDateSolved() != null)
+            complainJSON.put("dateSolved", complain.getDateSolved().getTime());
+        else
+            complainJSON.put("dateSolved", 0);
+
         complainJSON.put("accepted", complain.isAccepted());
 
         File complainFile = new File(context.getFilesDir(), "complain" + complain.getId() + ".dat");
@@ -46,7 +54,7 @@ public class ComplainsStorage {
                 complainJSON.getLong("id"),
                 complainJSON.getString("title"),
                 complainJSON.getString("content"),
-                new File(complainJSON.getString("imageLocal")),
+                complainJSON.getString("imagePath"),
                 complainJSON.getBoolean("accepted"),
                 new Date(complainJSON.getLong("dateCreated")),
                 new Date(complainJSON.getLong("dateSolved"))

@@ -6,11 +6,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.GradientDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
@@ -18,7 +18,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -31,21 +30,20 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.tangxiaolv.telegramgallery.GalleryActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import pl.marcinwroblewski.e_miasto.Bitmaps.BitmapsStorage;
-import pl.marcinwroblewski.e_miasto.Complain;
-import pl.marcinwroblewski.e_miasto.ComplainAdapter;
-import pl.marcinwroblewski.e_miasto.ComplainsStorage;
-import pl.marcinwroblewski.e_miasto.Events.EventsAdapter;
+import pl.marcinwroblewski.e_miasto.Complains.Complain;
+import pl.marcinwroblewski.e_miasto.Complains.ComplainAdapter;
 import pl.marcinwroblewski.e_miasto.Fragments.Dialog.ErrorDialogFragment;
+import pl.marcinwroblewski.e_miasto.JSONTo;
 import pl.marcinwroblewski.e_miasto.R;
-import pl.marcinwroblewski.e_miasto.ServerConnection;
+import pl.marcinwroblewski.e_miasto.Requests;
 
 
 /**
@@ -63,6 +61,11 @@ public class SendComplainFragment extends Fragment implements LocationListener {
     private LocationManager locationManager;
     private Location userLocation;
     private Bitmap issuePhotoBitmap;
+    private boolean useLocation;
+    private View mainView;
+    private ArrayList<Complain> complainsArrayList;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
 
     public SendComplainFragment() {
         // Required empty public constructor
@@ -81,9 +84,9 @@ public class SendComplainFragment extends Fragment implements LocationListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_send_complain, container, false);
-        issuePhoto = (ImageView) v.findViewById(R.id.issue_photo);
-        AppCompatButton addPhotoButton = (AppCompatButton) v.findViewById(R.id.add_photo_button);
+        mainView = inflater.inflate(R.layout.fragment_send_complain, container, false);
+        issuePhoto = (ImageView) mainView.findViewById(R.id.issue_photo);
+        AppCompatButton addPhotoButton = (AppCompatButton) mainView.findViewById(R.id.add_photo_button);
         addPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,10 +100,19 @@ public class SendComplainFragment extends Fragment implements LocationListener {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                     1337);
         } else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            if(locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+                useLocation = true;
+            }else if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+                useLocation = true;
+            } else {
+                locationManager = null;
+                useLocation = false;
+            }
         }
 
-        AppCompatButton sendIssueButton = (AppCompatButton) v.findViewById(R.id.send_issue);
+        AppCompatButton sendIssueButton = (AppCompatButton) mainView.findViewById(R.id.send_issue);
         sendIssueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,8 +128,8 @@ public class SendComplainFragment extends Fragment implements LocationListener {
                     return;
                 }
 
-                issueTitle = ((TextView)(v.findViewById(R.id.issue_title))).getText().toString();
-                issueDescription = ((TextView)(v.findViewById(R.id.issue_content))).getText().toString();
+                issueTitle = ((TextView)(mainView.findViewById(R.id.issue_title))).getText().toString();
+                issueDescription = ((TextView)(mainView.findViewById(R.id.issue_content))).getText().toString();
             }
         });
 
@@ -127,32 +139,40 @@ public class SendComplainFragment extends Fragment implements LocationListener {
         BitmapsStorage bitmapsStorage = new BitmapsStorage(getContext());
         String imagePath = bitmapsStorage.saveToInternalStorage(BitmapFactory.decodeResource(getResources(), R.drawable.jbie), "complain");
 
-        for(int i = 0; i < 50; i++) {
-            Complain complain = new Complain(
-                    i,
-                    "Complain " + i,
-                    getResources().getString(R.string.large_text),
-                    bitmapsStorage.loadImageFromStorage(imagePath, "complain"),
-                    false,
-                    new Date(),
-                    new Date()
-            );
-            complainArrayList.add(complain);
-            try {
-                ComplainsStorage.saveComplain(getContext(), complain);
-            } catch (JSONException | IOException e) {
-                e.printStackTrace();
-            }
-        }
+//        for(int i = 0; i < 50; i++) {
+//            Complain complain = new Complain(
+//                    i,
+//                    "Complain " + i,
+//                    getResources().getString(R.string.large_text),
+//                    bitmapsStorage.loadImageFromStorage(imagePath, "complain"),
+//                    false,
+//                    new Date(),
+//                    new Date()
+//            );
+//            complainArrayList.add(complain);
+//            try {
+//                ComplainsStorage.saveComplain(getContext(), complain);
+//            } catch (JSONException | IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
-        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.complains_recycler_view);
+        preferences = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
+        editor = preferences.edit();
+
+        DownloadComplainsAsyncTask complainsAsyncTask = new DownloadComplainsAsyncTask();
+        complainsAsyncTask.execute();
+
+        return mainView;
+    }
+
+    void showComplains() {
+        RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.complains_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        ComplainAdapter adapter = new ComplainAdapter(getContext(), complainArrayList);
+        ComplainAdapter adapter = new ComplainAdapter(getContext(), complainsArrayList);
         recyclerView.setAdapter(adapter);
-
-        return v;
     }
 
     void showDialog(String text) {
@@ -199,8 +219,8 @@ public class SendComplainFragment extends Fragment implements LocationListener {
             Glide.with(getContext()).load(issuePhotoFile).into(issuePhoto);
             Log.d("Load image", "issuePhoto" + (sharedPreferences.getInt("issueCounter", 0) - 1));
 
-            ServerConnection serverConnection = new ServerConnection();
-            serverConnection.sendBitmap(issuePhotoBitmap);
+//            ServerConnection serverConnection = new ServerConnection();
+//            serverConnection.sendBitmap(issuePhotoBitmap);
         }
     }
 
@@ -212,8 +232,10 @@ public class SendComplainFragment extends Fragment implements LocationListener {
 
     @Override
     public void onPause() {
-        //noinspection MissingPermission
-        locationManager.removeUpdates(this);
+
+        if(useLocation)
+            //noinspection MissingPermission
+            locationManager.removeUpdates(this);
         super.onPause();
     }
 
@@ -265,5 +287,37 @@ public class SendComplainFragment extends Fragment implements LocationListener {
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
+    }
+
+    class DownloadComplainsAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            String login = preferences.getString("login", "");
+            String password = preferences.getString("password", "");
+            Requests requests = new Requests(login, password);
+
+            String allComplainsResponse = requests.getAllComplains();
+            Log.d("Personal party", allComplainsResponse);
+
+            if(allComplainsResponse == null) return null;
+
+            try {
+                JSONArray complainsJSON = new JSONArray(allComplainsResponse);
+                complainsArrayList = JSONTo.complains(getContext(), complainsJSON);
+
+            } catch (JSONException | IOException e) {
+                e.printStackTrace();
+            }
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showComplains();
+                }
+            });
+
+            return null;
+        }
     }
 }

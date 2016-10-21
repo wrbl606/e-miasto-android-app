@@ -24,7 +24,7 @@ public class EventsStorage {
         JSONObject eventJSON = new JSONObject();
         eventJSON.put("id", event.getId());
         eventJSON.put("name", event.getName());
-        eventJSON.put("imageLocal", event.getImage().getAbsoluteFile().toString());
+        eventJSON.put("imagePath", event.getImage());
 
         JSONArray intrestsJSON = new JSONArray();
         for(String intrest : event.getIntrests())
@@ -57,7 +57,7 @@ public class EventsStorage {
         Event event = new Event(
                 eventJSON.getString("name"),
                 eventJSON.getLong("id"),
-                new File(eventJSON.getString("imageLocal")),
+                eventJSON.getString("imagePath"),
                 intrests,
                 eventJSON.getString("description"));
         return event;

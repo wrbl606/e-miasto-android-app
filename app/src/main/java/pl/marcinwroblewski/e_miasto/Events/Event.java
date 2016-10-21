@@ -1,6 +1,5 @@
 package pl.marcinwroblewski.e_miasto.Events;
 
-import java.io.File;
 import java.util.Set;
 
 /**
@@ -11,14 +10,14 @@ public class Event {
 
     private String name;
     private long id;
-    private File image;
+    private String imagePath;
     private Set<String> intrests;
     private String desription;
 
-    public Event(String name, long id, File image, Set<String> intrests, String description) {
+    public Event(String name, long id, String imagePath, Set<String> intrests, String description) {
         this.name = name;
         this.id = id;
-        this.image = image;
+        this.imagePath = imagePath;
         this.intrests = intrests;
         this.desription = description;
     }
@@ -39,12 +38,12 @@ public class Event {
         this.id = id;
     }
 
-    public File getImage() {
-        return image;
+    public String getImage() {
+        return imagePath;
     }
 
-    public void setImage(File image) {
-        this.image = image;
+    public void setImage(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public Set<String> getIntrests() {

@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -17,11 +16,8 @@ import org.json.JSONException;
 
 import java.io.FileNotFoundException;
 
-import pl.marcinwroblewski.e_miasto.Complain;
-import pl.marcinwroblewski.e_miasto.ComplainsStorage;
-import pl.marcinwroblewski.e_miasto.Events.Event;
-import pl.marcinwroblewski.e_miasto.Events.EventsStorage;
-import pl.marcinwroblewski.e_miasto.IntrestsViewGenerator;
+import pl.marcinwroblewski.e_miasto.Complains.Complain;
+import pl.marcinwroblewski.e_miasto.Complains.ComplainsStorage;
 import pl.marcinwroblewski.e_miasto.R;
 
 public class ComplainDetailsActivity extends AppCompatActivity {

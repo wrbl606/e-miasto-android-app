@@ -18,6 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -31,6 +33,7 @@
                 android:text="Zaloguj się"/>
 
             <EditText
+                android:id="@+id/login_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/Base.V7.Widget.AppCompat.EditText"
@@ -41,12 +44,15 @@
                 android:lines="1"/>
 
             <EditText
+                android:id="@+id/password_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/Base.V7.Widget.AppCompat.EditText"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:padding="@dimen/activity_vertical_margin"
-                android:hint="Hasło"/>
+                android:hint="Hasło"
+                android:inputType="textPassword"
+                android:lines="1"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/login_button"
@@ -62,6 +68,22 @@
                 android:layout_height="wrap_content"
                 style="@style/Base.Widget.AppCompat.Button.Borderless.Colored"
                 android:text="Nie mam konta" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/loading_screen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#aaffffff"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                style="@style/Base.Widget.AppCompat.ProgressBar"/>
 
         </LinearLayout>
 
