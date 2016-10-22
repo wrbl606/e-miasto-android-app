@@ -1,8 +1,6 @@
 package pl.marcinwroblewski.e_miasto.Activities;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -10,7 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
 
@@ -25,12 +23,13 @@ public class ComplainDetailsActivity extends AppCompatActivity {
     private long complainId;
     private Complain complain;
     private ImageView mainEventImage;
-    private TextView description;
+    private TextView description, dateCreated;
+    private View acceptance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_details);
+        setContentView(R.layout.activity_complain_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         if(getIntent().hasExtra("complainId")) {
@@ -46,20 +45,20 @@ public class ComplainDetailsActivity extends AppCompatActivity {
         toolbar.setTitle(complain.getTitle());
         setSupportActionBar(toolbar);
 
-        mainEventImage = (ImageView) findViewById(R.id.event_main_image);
-        description = (TextView) findViewById(R.id.event_description);
+        mainEventImage = (ImageView) findViewById(R.id.complain_main_image);
+        description = (TextView) findViewById(R.id.complain_description);
         description.setText(complain.getContent());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        dateCreated = (TextView) findViewById(R.id.complain_date);
+        dateCreated.setText(complain.getDateCreated());
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Glide.with(getApplicationContext()).load(complain.getPhoto()).into(mainEventImage);
+        ImageLoader.getInstance().displayImage(complain.getPhoto(), mainEventImage);
+
+        if(complain.isAccepted()) {
+            acceptance = findViewById(R.id.acceptance);
+            acceptance.setVisibility(View.VISIBLE);
+        }
     }
 }

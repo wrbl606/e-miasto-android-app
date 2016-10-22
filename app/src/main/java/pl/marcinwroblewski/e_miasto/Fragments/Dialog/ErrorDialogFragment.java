@@ -45,6 +45,14 @@ public class ErrorDialogFragment extends DialogFragment {
         TextView textView = (TextView) v.findViewById(R.id.error_message);
         textView.setText(text);
 
+        View okButton = v.findViewById(R.id.ok_button);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+
         return v;
     }
 

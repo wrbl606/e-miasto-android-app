@@ -1,6 +1,7 @@
 package pl.marcinwroblewski.e_miasto.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText login;
     private EditText password;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,12 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        preferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
+        if(preferences.contains("login")) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+        }
 
         View registerButton = findViewById(R.id.register_button);
         registerButton.setOnClickListener(new View.OnClickListener() {

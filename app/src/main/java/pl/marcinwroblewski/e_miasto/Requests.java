@@ -139,7 +139,7 @@ public class Requests {
 		
 	}
 	
-	public String addComplain(String title, String description, double lon, double lat, File... images) throws IOException {
+	public String addComplain(String title, String description, float lon, float lat, File... images) throws IOException {
 		
 		MultipartUtility multipartUtil = new MultipartUtility(
 				API_URL + "/complain/new", "UTF-8", getBasicAuth());
@@ -150,6 +150,7 @@ public class Requests {
 		multipartUtil.addFormField("latitude", String.valueOf(lat));
 		for(int i = 0; i < images.length; i++) {
 			multipartUtil.addFilePart("image" + i, images[i]);
+			Log.d("Multipart util", "Adding to form " + images[i].getAbsolutePath());
 		}
 		
 		return (multipartUtil.finish()).toString();

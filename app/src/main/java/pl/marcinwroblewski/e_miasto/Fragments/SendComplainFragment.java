@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -59,7 +58,7 @@ public class SendComplainFragment extends Fragment implements LocationListener {
     private ImageView issuePhoto;
     private LocationManager locationManager;
     private Location userLocation;
-    private Bitmap issuePhotoBitmap;
+    private File issuePhotoFile;
     private boolean useLocation;
     private View mainView;
     private ArrayList<Complain> complainsArrayList;
@@ -102,7 +101,7 @@ public class SendComplainFragment extends Fragment implements LocationListener {
             if(locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
                 useLocation = true;
-            }else if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
+            } else if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
                 useLocation = true;
             } else {
@@ -117,18 +116,21 @@ public class SendComplainFragment extends Fragment implements LocationListener {
             public void onClick(View view) {
                 String issueTitle, issueDescription;
 
-                if(issuePhotoBitmap == null) {
-                    showDialog("Dodaj zdjęcie");
+                if(issuePhotoFile == null) {
+                    showErrorDialog("Dodaj zdjęcie");
                     return;
                 }
 
                 if(userLocation == null) {
-                    showDialog("Twoja lokalizacja nie została jeszcze określona. Proszę spróbować ponownie za chwilę.");
+                    showErrorDialog("Twoja lokalizacja nie została jeszcze określona. Proszę spróbować ponownie za chwilę.");
                     return;
                 }
 
                 issueTitle = ((TextView)(mainView.findViewById(R.id.issue_title))).getText().toString();
                 issueDescription = ((TextView)(mainView.findViewById(R.id.issue_content))).getText().toString();
+
+                AddComplainAsyncTask addComplainAsyncTask = new AddComplainAsyncTask();
+                addComplainAsyncTask.execute(issueTitle, issueDescription);
             }
         });
 
@@ -174,7 +176,7 @@ public class SendComplainFragment extends Fragment implements LocationListener {
         recyclerView.setAdapter(adapter);
     }
 
-    void showDialog(String text) {
+    void showErrorDialog(String text) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
@@ -203,20 +205,33 @@ public class SendComplainFragment extends Fragment implements LocationListener {
         mListener = null;
     }
 
+    @SuppressWarnings("MissingPermission")
     @Override
     public void onResume() {
         super.onResume();
+
+        if(locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            useLocation = true;
+        } else if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+            useLocation = true;
+        } else {
+            locationManager = null;
+            useLocation = false;
+        }
 
         Log.d("onResume", "called");
 
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
         BitmapsStorage bitmapsStorage = new BitmapsStorage(getContext());
-        if (sharedPreferences.contains("issuePhoto")) {
-            File issuePhotoFile = bitmapsStorage.loadImageFromStorage(sharedPreferences.getString("issuePhoto", ""),
-                    "issuePhoto" + (sharedPreferences.getInt("issueCounter", 0) - 1));
-            issuePhotoBitmap = bitmapsStorage.fileToBitmap(issuePhotoFile);
+        if (sharedPreferences.contains("image")) {
+            issuePhotoFile = bitmapsStorage.loadImageFromStorage(sharedPreferences.getString("image", ""),
+                    "image" + (sharedPreferences.getInt("issueCounter", 0) - 1));
             Glide.with(getContext()).load(issuePhotoFile).into(issuePhoto);
-            Log.d("Load image", "issuePhoto" + (sharedPreferences.getInt("issueCounter", 0) - 1));
+            Log.d("Load image", "image" + (sharedPreferences.getInt("issueCounter", 0) - 1));
+
+            Log.d("Issue photo file", issuePhotoFile.getAbsolutePath());
 
 //            ServerConnection serverConnection = new ServerConnection();
 //            serverConnection.sendBitmap(issuePhotoBitmap);
@@ -315,6 +330,34 @@ public class SendComplainFragment extends Fragment implements LocationListener {
                     showComplains();
                 }
             });
+
+            return null;
+        }
+    }
+
+    class AddComplainAsyncTask extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            String issueTitle = strings[0];
+            String issueDescription = strings[1];
+
+            String login = preferences.getString("login", "");
+            String password = preferences.getString("password", "");
+            Requests requests = new Requests(login, password);
+
+            try {
+                Log.d("Add complain", requests.addComplain(issueTitle, issueDescription, (float) userLocation.getLongitude(), (float) userLocation.getLatitude(), issuePhotoFile));
+                showErrorDialog("Wysłano zgłoszenie");
+            } catch (IOException e) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showErrorDialog("Nie udało się wysłać zgłoszenia. Proszę spróbować ponownie później");
+                    }
+                });
+                e.printStackTrace();
+            }
 
             return null;
         }

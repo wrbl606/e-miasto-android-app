@@ -1,7 +1,5 @@
 package pl.marcinwroblewski.e_miasto.Complains;
 
-import java.util.Date;
-
 /**
  * Created by wrbl on 19.10.16.
  */
@@ -12,10 +10,10 @@ public class Complain {
     private String title, content;
     private String photoPath;
     private boolean accepted;
-    private Date dateCreated, dateSolved;
+    private String dateCreated, dateSolved;
 
 
-    public Complain(long id, String title, String content, String photoPath, boolean accepted, Date dateCreated, Date dateSolved) {
+    public Complain(long id, String title, String content, String photoPath, boolean accepted, String dateCreated, String dateSolved) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -65,19 +63,19 @@ public class Complain {
         this.accepted = accepted;
     }
 
-    public Date getDateCreated() {
+    public String getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public Date getDateSolved() {
+    public String getDateSolved() {
         return dateSolved;
     }
 
-    public void setDateSolved(Date dateSolved) {
+    public void setDateSolved(String dateSolved) {
         this.dateSolved = dateSolved;
     }
 }

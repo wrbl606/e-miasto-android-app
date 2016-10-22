@@ -25,12 +25,13 @@ public class EventsStorage {
         eventJSON.put("id", event.getId());
         eventJSON.put("name", event.getName());
         eventJSON.put("imagePath", event.getImage());
+        eventJSON.put("date", event.getDate());
 
-        JSONArray intrestsJSON = new JSONArray();
-        for(String intrest : event.getIntrests())
-            intrestsJSON.put(intrest);
+        JSONArray interestsJSON = new JSONArray();
+        for(String interest : event.getIntrests())
+            interestsJSON.put(interest);
 
-        eventJSON.put("intrests", intrestsJSON);
+        eventJSON.put("interests", interestsJSON);
         eventJSON.put("description", event.getDescription());
 
         File eventFile = new File(context.getFilesDir(), "event" + event.getId() + ".dat");
@@ -47,19 +48,20 @@ public class EventsStorage {
 
         JSONObject eventJSON = new JSONObject(text);
 
-        Set<String> intrests = new HashSet<>();
-        JSONArray intrestsJSON = eventJSON.getJSONArray("intrests");
+        Set<String> interests = new HashSet<>();
+        JSONArray interestsJSON = eventJSON.getJSONArray("interests");
 
-        for (int i = 0; i < intrestsJSON.length(); i++) {
-            intrests.add(intrestsJSON.getString(i));
+        for (int i = 0; i < interestsJSON.length(); i++) {
+            interests.add(interestsJSON.getString(i));
         }
 
         Event event = new Event(
                 eventJSON.getString("name"),
                 eventJSON.getLong("id"),
                 eventJSON.getString("imagePath"),
-                intrests,
-                eventJSON.getString("description"));
+                interests,
+                eventJSON.getString("description"),
+                eventJSON.getString("date"));
         return event;
     }
 

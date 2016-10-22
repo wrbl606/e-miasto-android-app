@@ -39,21 +39,16 @@ public class JSONTo {
                 imagePath = "http://188.137.38.116:5000/uploads/parties/" + imageJSON.get("name");
             }
 
-            events.add(new Event(
+            Event event = new Event(
                     eventJSON.getString("title"),
                     eventJSON.getLong("id"),
                     imagePath,
                     interests,
-                    eventJSON.getString("description")
-            ));
+                    eventJSON.getString("description"),
+                    eventJSON.getString("party_date"));
 
-            EventsStorage.saveEvent(context, new Event(
-                    eventJSON.getString("title"),
-                    eventJSON.getLong("id"),
-                    imagePath,
-                    interests,
-                    eventJSON.getString("description")
-            ));
+            events.add(event);
+            EventsStorage.saveEvent(context,event);
         }
 
         return events;
@@ -71,25 +66,18 @@ public class JSONTo {
                 imagePath = "http://188.137.38.116:5000/uploads/complains/" + imageJSON.get("name");
             }
 
-            complains.add(new Complain(
+            Complain complain = new Complain(
                     complainJSON.getLong("id"),
                     complainJSON.getString("title"),
                     complainJSON.getString("description"),
                     imagePath,
                     complainJSON.getBoolean("acceptance"),
-                    null,
+                    complainJSON.getString("date_complain"),
                     null
-            ));
+            );
 
-            ComplainsStorage.saveComplain(context, new Complain(
-                    complainJSON.getLong("id"),
-                    complainJSON.getString("title"),
-                    complainJSON.getString("description"),
-                    imagePath,
-                    complainJSON.getBoolean("acceptance"),
-                    null,
-                    null
-            ));
+            complains.add(complain);
+            ComplainsStorage.saveComplain(context, complain);
         }
 
         return complains;

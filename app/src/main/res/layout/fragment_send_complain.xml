@@ -83,6 +83,7 @@
                     android:layout_height="wrap_content"
                     android:lines="5"
                     android:inputType="textMultiLine"
+                    android:gravity="top"
                     />
 
             </LinearLayout>

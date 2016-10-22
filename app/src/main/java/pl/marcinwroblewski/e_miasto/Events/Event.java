@@ -8,18 +8,22 @@ import java.util.Set;
 
 public class Event {
 
-    private String name;
+
     private long id;
+    private String name;
+    private String desription;
+    private String date;
     private String imagePath;
     private Set<String> intrests;
-    private String desription;
 
-    public Event(String name, long id, String imagePath, Set<String> intrests, String description) {
+
+    public Event(String name, long id, String imagePath, Set<String> intrests, String description, String date) {
         this.name = name;
         this.id = id;
         this.imagePath = imagePath;
         this.intrests = intrests;
         this.desription = description;
+        this.date = date;
     }
 
     public String getName() {
@@ -63,4 +67,11 @@ public class Event {
     }
 
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 }

@@ -5,4 +5,5 @@
     <color name="colorAccent">#ffca28</color>
     <color name="primaryText">#212121</color>
     <color name="warning">#d32f2f</color>
+    <color name="good">#00e676</color>
 </resources>

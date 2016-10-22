@@ -1,17 +1,14 @@
 package pl.marcinwroblewski.e_miasto.Activities;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONException;
 
@@ -27,7 +24,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     private long eventId;
     private Event event;
     private ImageView mainEventImage;
-    private TextView description;
+    private TextView description, date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,21 +49,16 @@ public class EventDetailsActivity extends AppCompatActivity {
         description = (TextView) findViewById(R.id.event_description);
         description.setText(event.getDescription());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        date = (TextView) findViewById(R.id.event_date);
+        date.setText(event.getDate());
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Glide.with(getApplicationContext()).load(event.getImage()).into(mainEventImage);
+        ImageLoader.getInstance().displayImage(event.getImage(), mainEventImage);
 
-        LinearLayout intrestsContainer = (LinearLayout) findViewById(R.id.event_intrests);
-        intrestsContainer.removeAllViews();
-        for(String intrest : event.getIntrests())
-            intrestsContainer.addView(IntrestsViewGenerator.getView(getApplicationContext(), intrest));
+        LinearLayout interestsContainer = (LinearLayout) findViewById(R.id.event_intrests);
+        interestsContainer.removeAllViews();
+        for(String interest : event.getIntrests())
+            interestsContainer.addView(IntrestsViewGenerator.getView(getApplicationContext(), interest));
     }
 }

@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -26,11 +25,11 @@ public class ComplainsStorage {
         complainJSON.put("content", complain.getContent());
 
         if(complain.getDateCreated() != null)
-            complainJSON.put("dateCreated", complain.getDateCreated().getTime());
+            complainJSON.put("dateCreated", complain.getDateCreated());
         else
             complainJSON.put("dateCreated", 0);
         if(complain.getDateSolved() != null)
-            complainJSON.put("dateSolved", complain.getDateSolved().getTime());
+            complainJSON.put("dateSolved", complain.getDateSolved());
         else
             complainJSON.put("dateSolved", 0);
 
@@ -56,8 +55,8 @@ public class ComplainsStorage {
                 complainJSON.getString("content"),
                 complainJSON.getString("imagePath"),
                 complainJSON.getBoolean("accepted"),
-                new Date(complainJSON.getLong("dateCreated")),
-                new Date(complainJSON.getLong("dateSolved"))
+                complainJSON.getString("dateCreated").substring(0, 9),
+                complainJSON.getString("dateSolved")
         );
         return complain;
     }

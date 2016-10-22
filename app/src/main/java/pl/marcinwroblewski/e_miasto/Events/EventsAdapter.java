@@ -57,14 +57,11 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        Event album = eventsList.get(position);
-        holder.title.setText(album.getName());
-
-        // loading album cover using Glide library
-        //Glide.with(mContext).load(album.getImage()).into(holder.mainImage);
+        Event event = eventsList.get(position);
+        holder.title.setText(event.getName());
 
         ImageLoader imageLoader = ImageLoader.getInstance();
-        imageLoader.displayImage(album.getImage(), holder.mainImage);
+        imageLoader.displayImage(event.getImage(), holder.mainImage);
 
         holder.share.setOnClickListener(new View.OnClickListener() {
             @Override

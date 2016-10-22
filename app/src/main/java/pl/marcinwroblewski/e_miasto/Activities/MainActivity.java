@@ -155,8 +155,8 @@ public class MainActivity extends AppCompatActivity implements
         editor.putInt("issueCounter", preferences.getInt("issueCounter", 0) + 1);
         String imagePath = bitmapsStorage.saveToInternalStorage(
                 BitmapFactory.decodeFile(photos.get(0)),
-                "issuePhoto" + preferences.getInt("issueCounter", 0));
-        editor.putString("issuePhoto", imagePath);
+                "image" + preferences.getInt("issueCounter", 0));
+        editor.putString("image", imagePath);
 
         editor.apply();
     }

@@ -13,7 +13,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
- 
+import java.util.Random;
+
 /**
  * This utility class provides an abstraction layer for sending multipart HTTP
  * POST requests to a web server.
@@ -81,11 +82,13 @@ public class MultipartUtility {
      */
     public void addFilePart(String fieldName, File uploadFile)
             throws IOException {
+        Random random = new Random();
+
         String fileName = uploadFile.getName();
         writer.append("--" + boundary).append(LINE_FEED);
         writer.append(
                 "Content-Disposition: form-data; name=\"" + fieldName
-                        + "\"; filename=\"" + fileName + "\"")
+                        + "\"; filename=\"" + uploadFile.getName() + "\"")
                 .append(LINE_FEED);
         writer.append(
                 "Content-Type: "
@@ -143,7 +146,7 @@ public class MultipartUtility {
             reader.close();
             httpConn.disconnect();
         } else {
-            throw new IOException("Server returned non-OK status: " + status);
+            throw new IOException("Server returned non-OK status: " + status + ": " + httpConn.getResponseMessage());
         }
  
         return response;
