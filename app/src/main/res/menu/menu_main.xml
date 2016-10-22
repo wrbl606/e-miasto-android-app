@@ -9,10 +9,4 @@
         android:title="Ustawienia"
         android:icon="@drawable/ic_settings_white_24dp"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/logout"
-        android:orderInCategory="1000"
-        android:title="Wyloguj"
-        android:icon="@drawable/ic_close_black_24dp"
-        app:showAsAction="never" />
 </menu>

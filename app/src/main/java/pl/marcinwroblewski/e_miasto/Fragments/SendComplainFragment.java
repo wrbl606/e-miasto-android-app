@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,7 +39,10 @@ import java.util.ArrayList;
 import pl.marcinwroblewski.e_miasto.Bitmaps.BitmapsStorage;
 import pl.marcinwroblewski.e_miasto.Complains.Complain;
 import pl.marcinwroblewski.e_miasto.Complains.ComplainAdapter;
+import pl.marcinwroblewski.e_miasto.ErrorCardAdapter;
 import pl.marcinwroblewski.e_miasto.Fragments.Dialog.ErrorDialogFragment;
+import pl.marcinwroblewski.e_miasto.Fragments.Dialog.ProgressDialogFragment;
+import pl.marcinwroblewski.e_miasto.Fragments.Dialog.SuccessDialogFragment;
 import pl.marcinwroblewski.e_miasto.JSONTo;
 import pl.marcinwroblewski.e_miasto.R;
 import pl.marcinwroblewski.e_miasto.Requests;
@@ -93,22 +97,7 @@ public class SendComplainFragment extends Fragment implements LocationListener {
         });
 
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                    1337);
-        } else {
-            if(locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-                useLocation = true;
-            } else if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-                useLocation = true;
-            } else {
-                locationManager = null;
-                useLocation = false;
-            }
-        }
+        tryToRegisterLocationListener();
 
         AppCompatButton sendIssueButton = (AppCompatButton) mainView.findViewById(R.id.send_issue);
         sendIssueButton.setOnClickListener(new View.OnClickListener() {
@@ -134,30 +123,6 @@ public class SendComplainFragment extends Fragment implements LocationListener {
             }
         });
 
-
-        ArrayList<Complain> complainArrayList = new ArrayList<>();
-
-//        BitmapsStorage bitmapsStorage = new BitmapsStorage(getContext());
-//        String imagePath = bitmapsStorage.saveToInternalStorage(BitmapFactory.decodeResource(getResources(), R.drawable.jbie), "complain");
-
-//        for(int i = 0; i < 50; i++) {
-//            Complain complain = new Complain(
-//                    i,
-//                    "Complain " + i,
-//                    getResources().getString(R.string.large_text),
-//                    bitmapsStorage.loadImageFromStorage(imagePath, "complain"),
-//                    false,
-//                    new Date(),
-//                    new Date()
-//            );
-//            complainArrayList.add(complain);
-//            try {
-//                ComplainsStorage.saveComplain(getContext(), complain);
-//            } catch (JSONException | IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
         preferences = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
         editor = preferences.edit();
 
@@ -167,12 +132,40 @@ public class SendComplainFragment extends Fragment implements LocationListener {
         return mainView;
     }
 
+    void tryToRegisterLocationListener() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    1337);
+        } else {
+            if(locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+                useLocation = true;
+            } else if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+                useLocation = true;
+            } else {
+                locationManager = null;
+                useLocation = false;
+            }
+        }
+    }
+
     void showComplains() {
         RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.complains_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         ComplainAdapter adapter = new ComplainAdapter(getContext(), complainsArrayList);
+        recyclerView.setAdapter(adapter);
+    }
+
+    public void showErrorCard(String error) {
+        RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.complains_recycler_view);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        ErrorCardAdapter adapter = new ErrorCardAdapter(error);
         recyclerView.setAdapter(adapter);
     }
 
@@ -186,6 +179,31 @@ public class SendComplainFragment extends Fragment implements LocationListener {
 
         DialogFragment newFragment = ErrorDialogFragment.newInstance(text);
         newFragment.show(ft, "Error");
+    }
+
+    void showSuccessDialog(String text) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        DialogFragment newFragment = SuccessDialogFragment.newInstance(text);
+        newFragment.show(ft, "Error");
+    }
+
+    DialogFragment showProgressDialog() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        DialogFragment newFragment = ProgressDialogFragment.newInstance();
+        newFragment.show(ft, "Error");
+        return newFragment;
     }
 
     @Override
@@ -210,16 +228,7 @@ public class SendComplainFragment extends Fragment implements LocationListener {
     public void onResume() {
         super.onResume();
 
-        if(locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-            useLocation = true;
-        } else if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-            useLocation = true;
-        } else {
-            locationManager = null;
-            useLocation = false;
-        }
+        tryToRegisterLocationListener();
 
         Log.d("onResume", "called");
 
@@ -311,25 +320,30 @@ public class SendComplainFragment extends Fragment implements LocationListener {
             String password = preferences.getString("password", "");
             Requests requests = new Requests(login, password);
 
-            String allComplainsResponse = requests.getAllComplains();
-
-            if(allComplainsResponse == null) return null;
-                Log.d("Personal party", allComplainsResponse);
-
+            String allComplainsResponse = "-1";
             try {
+                allComplainsResponse = requests.getAllComplains();
+                Log.d("All complains", allComplainsResponse);
                 JSONArray complainsJSON = new JSONArray(allComplainsResponse);
                 complainsArrayList = JSONTo.complains(getContext(), complainsJSON);
-
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showComplains();
+                    }
+                });
             } catch (JSONException | IOException e) {
+                final String finalAllComplainsResponse = allComplainsResponse;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showErrorCard(finalAllComplainsResponse);
+                    }
+                });
                 e.printStackTrace();
             }
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    showComplains();
-                }
-            });
+
 
             return null;
         }
@@ -346,14 +360,21 @@ public class SendComplainFragment extends Fragment implements LocationListener {
             String password = preferences.getString("password", "");
             Requests requests = new Requests(login, password);
 
+            DialogFragment progressFragment = showProgressDialog();
+
+            String addComplainResponse = "-1";
             try {
-                Log.d("Add complain", requests.addComplain(issueTitle, issueDescription, (float) userLocation.getLongitude(), (float) userLocation.getLatitude(), issuePhotoFile));
-                showErrorDialog("Wysłano zgłoszenie");
-            } catch (IOException e) {
+                addComplainResponse = requests.addComplain(issueTitle, issueDescription, (float) userLocation.getLongitude(), (float) userLocation.getLatitude(), issuePhotoFile);
+                Log.d("Add complain", addComplainResponse);
+                progressFragment.dismiss();
+                showSuccessDialog("Zgłoszenie odebrane pomyślnie!");
+            } catch (final IOException e) {
+                final String finalAddComplainResponse = addComplainResponse;
+                progressFragment.dismiss();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showErrorDialog("Nie udało się wysłać zgłoszenia. Proszę spróbować ponownie później");
+                        showErrorDialog("Nie udało się wysłać zgłoszenia. Proszę spróbować ponownie później (" + e.getMessage() + ")");
                     }
                 });
                 e.printStackTrace();

@@ -224,7 +224,7 @@ public class Requests {
         }
     }
 
-	public String getPersonalizedParties() {
+	public String getPersonalizedParties() throws IOException {
 		
 		HttpURLConnection connection = null;
 		 
@@ -250,7 +250,7 @@ public class Requests {
 		    return response.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-		  	return null;
+		  	return String.valueOf(connection.getResponseCode());
 		} finally {
 			if (connection != null) {
 				connection.disconnect();
@@ -327,7 +327,7 @@ public class Requests {
 	  }
 	}
 	
-	public String getAllComplains() {
+	public String getAllComplains() throws IOException {
 		
 		HttpURLConnection connection = null;
 		 
@@ -355,7 +355,7 @@ public class Requests {
 		    return response.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-		  	return null;
+		  	return String.valueOf(connection.getResponseCode());
 		} finally {
 			if (connection != null) {
 				connection.disconnect();

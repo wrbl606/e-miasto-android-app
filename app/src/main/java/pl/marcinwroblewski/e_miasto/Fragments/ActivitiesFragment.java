@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.marcinwroblewski.e_miasto.ErrorCardAdapter;
 import pl.marcinwroblewski.e_miasto.Events.Event;
 import pl.marcinwroblewski.e_miasto.Events.EventsAdapter;
 import pl.marcinwroblewski.e_miasto.JSONTo;
@@ -72,32 +73,6 @@ public class ActivitiesFragment extends Fragment {
         preferences = getContext().getSharedPreferences(getContext().getPackageName(), Context.MODE_PRIVATE);
         editor = preferences.edit();
 
-//        BitmapsStorage bitmapsStorage = new BitmapsStorage(getContext());
-//        String path = bitmapsStorage.saveToInternalStorage(
-//                BitmapFactory.decodeResource(getResources(), R.drawable.jbie), "test");
-//
-//        for (int i = 0; i < 50; i++) {
-//            Set<String> intrests = new HashSet<>();
-//            intrests.add("Impreza w plenerze");
-//            intrests.add("Coś");
-//            intrests.add("Konkret");
-//
-//            Event event = new Event(
-//                    "Event " + i,
-//                    i,
-//                    bitmapsStorage.loadImageFromStorage(path, "test"),
-//                    intrests,
-//                    getText(R.string.large_text).toString());
-//
-//            try {
-//                EventsStorage.saveEvent(getContext(), event);
-//            } catch (JSONException | IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            eventList.add(event);
-//        }
-
         DownloadPartiesAsyncTask partiesAsyncTask = new DownloadPartiesAsyncTask();
         partiesAsyncTask.execute();
 
@@ -110,6 +85,15 @@ public class ActivitiesFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         EventsAdapter adapter = new EventsAdapter(getContext(), eventList);
+        recyclerView.setAdapter(adapter);
+    }
+
+    public void showErrorCard(String error) {
+        RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.recycler_view);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        ErrorCardAdapter adapter = new ErrorCardAdapter(error);
         recyclerView.setAdapter(adapter);
     }
 
@@ -153,25 +137,28 @@ public class ActivitiesFragment extends Fragment {
             String password = preferences.getString("password", "");
             Requests requests = new Requests(login, password);
 
-            String allPersonalizedPartiesResponse = requests.getPersonalizedParties();
-
-            if(allPersonalizedPartiesResponse == null) return null;
-            Log.d("Personal party", allPersonalizedPartiesResponse);
-
+            String allPersonalizedPartiesResponse = "-1";
             try {
+                allPersonalizedPartiesResponse = requests.getPersonalizedParties();
+                Log.d("Personal party", allPersonalizedPartiesResponse);
                 JSONArray eventsJSON = new JSONArray(allPersonalizedPartiesResponse);
                 eventList = JSONTo.events(getContext(), eventsJSON);
-
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showEvents();
+                    }
+                });
             } catch (JSONException | IOException e) {
+                final String finalAllPersonalizedPartiesResponse = allPersonalizedPartiesResponse;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showErrorCard(finalAllPersonalizedPartiesResponse);
+                    }
+                });
                 e.printStackTrace();
             }
-
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    showEvents();
-                }
-            });
 
             return null;
         }

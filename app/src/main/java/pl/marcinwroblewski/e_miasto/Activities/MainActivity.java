@@ -88,11 +88,7 @@ public class MainActivity extends AppCompatActivity implements
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.logout) {
-            finish();
-            return true;
-        } else if(id == R.id.action_settings) {
+        if(id == R.id.action_settings) {
             startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
         }
 
