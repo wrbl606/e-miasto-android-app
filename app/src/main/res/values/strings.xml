@@ -171,5 +171,5 @@
     <string name="title_activity_complain_details">ComplainDetailsActivity</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
-    <string name="credits">E-miasto 0.1 Alpha \n\nTwórca serwisu internetowego: \nGrzegorz Mrózek (lpmusicon@gmail.com)\n\nTwórca aplikacji: \nMarcin Wróblewski (marcinwroblewski@outlook.com)</string>
+    <string name="credits">E-miasto 0.1 Alpha stworzone przez <b>sudo rm -rf /</b> \n\nTwórca serwisu internetowego: \nGrzegorz Mrózek (lpmusicon@gmail.com)\n\nTwórca aplikacji: \nMarcin Wróblewski (marcinwroblewski@outlook.com)</string>
 </resources>
