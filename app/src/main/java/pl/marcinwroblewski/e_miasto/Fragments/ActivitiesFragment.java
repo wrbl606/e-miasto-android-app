@@ -80,6 +80,8 @@ public class ActivitiesFragment extends Fragment {
     }
 
     public void showEvents() {
+        hideLoadingIndicator();
+
         RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
         recyclerView.setLayoutManager(layoutManager);
@@ -89,12 +91,18 @@ public class ActivitiesFragment extends Fragment {
     }
 
     public void showErrorCard(String error) {
+        hideLoadingIndicator();
+
         RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         ErrorCardAdapter adapter = new ErrorCardAdapter(error);
         recyclerView.setAdapter(adapter);
+    }
+
+    private void hideLoadingIndicator() {
+        mainView.findViewById(R.id.loading_indicator).setVisibility(View.GONE);
     }
 
     @Override

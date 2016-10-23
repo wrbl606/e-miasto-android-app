@@ -21,6 +21,8 @@ import java.util.Set;
 public class EventsStorage {
 
     public static void saveEvent(Context context, Event event) throws JSONException, IOException {
+        if(context == null) return;
+
         JSONObject eventJSON = new JSONObject();
         eventJSON.put("id", event.getId());
         eventJSON.put("name", event.getName());
@@ -61,7 +63,7 @@ public class EventsStorage {
                 eventJSON.getString("imagePath"),
                 interests,
                 eventJSON.getString("description"),
-                eventJSON.getString("date"));
+                eventJSON.getString("date").substring(0, 9));
         return event;
     }
 

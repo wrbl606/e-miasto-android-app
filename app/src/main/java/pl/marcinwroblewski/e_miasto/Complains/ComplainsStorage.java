@@ -18,6 +18,8 @@ import java.util.Scanner;
 public class ComplainsStorage {
 
     public static void saveComplain(Context context, Complain complain) throws JSONException, IOException {
+        if(context == null) return;
+
         JSONObject complainJSON = new JSONObject();
         complainJSON.put("id", complain.getId());
         complainJSON.put("title", complain.getTitle());

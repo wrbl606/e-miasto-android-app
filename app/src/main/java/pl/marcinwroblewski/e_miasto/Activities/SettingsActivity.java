@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import pl.marcinwroblewski.e_miasto.R;
 
@@ -45,5 +46,13 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }
         });
+
+        setCurrentUser(preferences.getString("login", "☺"));
     }
+
+    void setCurrentUser(String currentUser) {
+        TextView currentUserTV = (TextView) findViewById(R.id.current_user);
+        currentUserTV.setText(currentUser);
+    }
+
 }

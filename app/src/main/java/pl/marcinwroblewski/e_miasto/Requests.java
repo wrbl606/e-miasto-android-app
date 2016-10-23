@@ -190,7 +190,7 @@ public class Requests {
 	  }
 	}
 
-    public String getCurrentUser() {
+    public String getCurrentUser() throws IOException {
 
         HttpURLConnection connection = null;
 
@@ -216,7 +216,13 @@ public class Requests {
             return response.toString();
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+
+			switch (connection.getResponseCode()) {
+				case HttpURLConnection.HTTP_UNAUTHORIZED:
+					return "Błędne dane";
+				default:
+					return "Nie udało się nawiązać połączenia z serwerem. Proszę spróbować ponownie później. (" + connection.getResponseCode() + ")";
+			}
         } finally {
             if (connection != null) {
                 connection.disconnect();

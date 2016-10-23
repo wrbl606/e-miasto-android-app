@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import java.io.IOException;
+
 import pl.marcinwroblewski.e_miasto.R;
 import pl.marcinwroblewski.e_miasto.Requests;
 
@@ -61,10 +63,10 @@ public class LoginActivity extends AppCompatActivity {
         loadingIndicator.setVisibility(View.VISIBLE);
     }
 
-    public void showLoginError() {
+    public void showLoginError(String error) {
         View loadingIndicator = findViewById(R.id.loading_screen);
         loadingIndicator.setVisibility(View.GONE);
-        login.setError("Nieprawidłowe dane");
+        login.setError(error);
     }
 
     class LoginAsyncTask extends AsyncTask<String, Void, Boolean> {
@@ -76,7 +78,6 @@ public class LoginActivity extends AppCompatActivity {
 
             Requests requests = new Requests(login, password);
 
-
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -84,25 +85,25 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
 
-            String response = requests.getCurrentUser();
-
-            if(response == null) {
+            String response = null;
+            try {
+                response = requests.getCurrentUser();
+                Log.d("Login", "" + response);
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
+            } catch (IOException e) {
+                final String finalResponse = response;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        showLoginError();
+                        showLoginError(finalResponse);
                     }
                 });
+                e.printStackTrace();
                 return false;
             }
 
-            Log.d("Login", "" + response);
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            finish();
             return true;
-
-
-
         }
     }
 }

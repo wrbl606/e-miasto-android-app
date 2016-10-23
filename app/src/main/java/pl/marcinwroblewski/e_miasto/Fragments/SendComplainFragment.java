@@ -97,6 +97,7 @@ public class SendComplainFragment extends Fragment implements LocationListener {
         });
 
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+
         tryToRegisterLocationListener();
 
         AppCompatButton sendIssueButton = (AppCompatButton) mainView.findViewById(R.id.send_issue);
@@ -133,6 +134,11 @@ public class SendComplainFragment extends Fragment implements LocationListener {
     }
 
     void tryToRegisterLocationListener() {
+        if(locationManager != null) {
+            Log.e("Location Manager", "was null!");
+            return;
+        }
+
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
@@ -152,6 +158,8 @@ public class SendComplainFragment extends Fragment implements LocationListener {
     }
 
     void showComplains() {
+        hideLoadingIndicator();
+
         RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.complains_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -161,6 +169,8 @@ public class SendComplainFragment extends Fragment implements LocationListener {
     }
 
     public void showErrorCard(String error) {
+        hideLoadingIndicator();
+
         RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.complains_recycler_view);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 1);
         recyclerView.setLayoutManager(layoutManager);
@@ -204,6 +214,10 @@ public class SendComplainFragment extends Fragment implements LocationListener {
         DialogFragment newFragment = ProgressDialogFragment.newInstance();
         newFragment.show(ft, "Error");
         return newFragment;
+    }
+
+    private void hideLoadingIndicator() {
+        mainView.findViewById(R.id.loading_indicator).setVisibility(View.GONE);
     }
 
     @Override
