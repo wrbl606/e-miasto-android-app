@@ -1,7 +1,7 @@
 package pl.marcinwroblewski.e_miasto.Complains;
 
 /**
- * Created by wrbl on 19.10.16.
+ * Created by Marcin Wróblewski on 19.10.16.
  */
 
 public class Complain {

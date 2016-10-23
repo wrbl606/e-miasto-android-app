@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 /**
- * Created by Admin on 16.10.2016.
+ * Created by Marcin Wróblewski on 16.10.2016.
  */
 
 public class ErrorCardAdapter extends RecyclerView.Adapter<ErrorCardAdapter.MyViewHolder> {

@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 /**
- * Created by wrbl on 19.10.16.
+ * Created by Marcin Wróblewski on 19.10.16.
  */
 
 public class ComplainsStorage {

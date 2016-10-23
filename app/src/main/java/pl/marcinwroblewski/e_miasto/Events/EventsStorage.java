@@ -15,7 +15,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 /**
- * Created by Admin on 17.10.2016.
+ * Created by Marcin Wróblewski on 17.10.2016.
  */
 
 public class EventsStorage {

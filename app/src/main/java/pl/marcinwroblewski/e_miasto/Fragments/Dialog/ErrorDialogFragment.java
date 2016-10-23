@@ -10,7 +10,7 @@ import android.widget.TextView;
 import pl.marcinwroblewski.e_miasto.R;
 
 /**
- * Created by Admin on 18.10.2016.
+ * Created by Marcin Wróblewski on 18.10.2016.
  */
 
 public class ErrorDialogFragment extends DialogFragment {

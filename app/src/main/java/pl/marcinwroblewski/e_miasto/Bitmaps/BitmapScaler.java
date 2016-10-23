@@ -1,11 +1,10 @@
 package pl.marcinwroblewski.e_miasto.Bitmaps;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 /**
- * Created by Admin on 18.10.2016.
+ * Created by Marcin Wróblewski on 18.10.2016.
  */
 
 public class BitmapScaler {

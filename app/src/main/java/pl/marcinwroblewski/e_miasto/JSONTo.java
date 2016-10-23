@@ -17,7 +17,7 @@ import pl.marcinwroblewski.e_miasto.Events.Event;
 import pl.marcinwroblewski.e_miasto.Events.EventsStorage;
 
 /**
- * Created by Admin on 21.10.2016.
+ * Created by Marcin Wróblewski on 21.10.2016.
  */
 
 public class JSONTo {

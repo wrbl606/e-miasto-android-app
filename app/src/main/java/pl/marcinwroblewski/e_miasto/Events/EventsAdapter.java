@@ -19,7 +19,7 @@ import pl.marcinwroblewski.e_miasto.Activities.EventDetailsActivity;
 import pl.marcinwroblewski.e_miasto.R;
 
 /**
- * Created by Admin on 16.10.2016.
+ * Created by Marcin Wróblewski on 16.10.2016.
  */
 
 public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.MyViewHolder> {

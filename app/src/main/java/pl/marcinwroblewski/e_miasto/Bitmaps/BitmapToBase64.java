@@ -6,7 +6,7 @@ import android.util.Base64;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Created by Admin on 18.10.2016.
+ * Created by Marcin Wróblewski on 18.10.2016.
  */
 
 public class BitmapToBase64 {

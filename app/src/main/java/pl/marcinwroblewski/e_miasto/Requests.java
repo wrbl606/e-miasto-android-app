@@ -12,6 +12,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * Created by Marcin Wróblewski on 14.10.2016.
+ */
+
 public class Requests {
 
 	private String login, password;

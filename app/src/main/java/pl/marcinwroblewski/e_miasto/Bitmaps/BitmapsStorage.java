@@ -11,7 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * Created by Admin on 16.10.2016.
+ * Created by Marcin Wróblewski on 16.10.2016.
  */
 
 public class BitmapsStorage {

@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 /**
- * Created by Admin on 17.10.2016.
+ * Created by Marcin Wróblewski on 17.10.2016.
  */
 
 public class IntrestsViewGenerator {

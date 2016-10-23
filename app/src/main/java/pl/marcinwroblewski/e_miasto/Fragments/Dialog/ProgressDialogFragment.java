@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import pl.marcinwroblewski.e_miasto.R;
 
 /**
- * Created by Admin on 18.10.2016.
+ * Created by Marcin Wróblewski on 18.10.2016.
  */
 
 public class ProgressDialogFragment extends DialogFragment {

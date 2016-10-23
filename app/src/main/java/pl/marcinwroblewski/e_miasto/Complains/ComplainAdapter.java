@@ -19,7 +19,7 @@ import pl.marcinwroblewski.e_miasto.Activities.ComplainDetailsActivity;
 import pl.marcinwroblewski.e_miasto.R;
 
 /**
- * Created by wrbl on 19.10.16.
+ * Created by Marcin Wróblewski on 19.10.16.
  */
 
 public class ComplainAdapter extends RecyclerView.Adapter<ComplainAdapter.MyViewHolder> {
