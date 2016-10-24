@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -145,12 +146,33 @@ public class ActivitiesFragment extends Fragment {
             String password = preferences.getString("password", "");
             Requests requests = new Requests(login, password);
 
+
             String allPersonalizedPartiesResponse = "-1";
             try {
                 allPersonalizedPartiesResponse = requests.getPersonalizedParties();
                 Log.d("Personal party", allPersonalizedPartiesResponse);
                 JSONArray eventsJSON = new JSONArray(allPersonalizedPartiesResponse);
-                eventList = JSONTo.events(getContext(), eventsJSON);
+                if(eventsJSON.length() > 0)
+                    eventList = JSONTo.events(getContext(), eventsJSON);
+                else {
+                    String allParties = requests.getAllParties();
+                    JSONArray allEventsJSON = new JSONArray(allParties);
+                    eventList = JSONTo.events(getContext(), allEventsJSON);
+
+                    try {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getContext(), "Brak wydarzeń pasujących do zainteresowań.\nWyświetlone zostaną wszystkie wydarzenia", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } catch (NullPointerException e) {
+                        Log.e("AsyncTask", "getActivity() returned null");
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -158,17 +180,20 @@ public class ActivitiesFragment extends Fragment {
                     }
                 });
             } catch (JSONException | IOException e) {
-                final String finalAllPersonalizedPartiesResponse = allPersonalizedPartiesResponse;
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showErrorCard(finalAllPersonalizedPartiesResponse);
-                    }
-                });
+                showErrorCardOnUiThread(allPersonalizedPartiesResponse);
                 e.printStackTrace();
             }
 
             return null;
+        }
+
+        public void showErrorCardOnUiThread(final String text) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showErrorCard(text);
+                }
+            });
         }
     }
 }

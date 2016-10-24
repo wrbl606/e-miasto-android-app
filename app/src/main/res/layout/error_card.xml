@@ -18,12 +18,14 @@
         android:paddingRight="@dimen/activity_horizontal_margin">
 
         <ImageView
+            android:id="@+id/error_image"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/error_heart"/>
 
         <TextView
+            android:id="@+id/error_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Base.TextAppearance.AppCompat.Headline"
@@ -32,6 +34,7 @@
             android:gravity="center"/>
 
         <TextView
+            android:id="@+id/error_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Coś poszło nie tak i nie udało się pobrać danych.\nSpróbuj ponownie później."

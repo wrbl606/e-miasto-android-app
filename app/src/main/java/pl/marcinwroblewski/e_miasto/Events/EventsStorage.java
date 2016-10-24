@@ -63,7 +63,7 @@ public class EventsStorage {
                 eventJSON.getString("imagePath"),
                 interests,
                 eventJSON.getString("description"),
-                eventJSON.getString("date").substring(0, 9));
+                eventJSON.getString("date").substring(0, 10));
         return event;
     }
 

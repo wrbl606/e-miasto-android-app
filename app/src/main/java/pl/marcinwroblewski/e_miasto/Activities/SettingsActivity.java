@@ -44,6 +44,7 @@ public class SettingsActivity extends AppCompatActivity {
                 editor.apply();
 
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                finish();
             }
         });
 

@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -33,6 +34,18 @@ public class ErrorCardAdapter extends RecyclerView.Adapter<ErrorCardAdapter.MyVi
 
         TextView errorTV = (TextView) itemView.findViewById(R.id.error);
         errorTV.setText(error);
+
+        if(error.equals("no_event")) {
+            ImageView errorIV = (ImageView) itemView.findViewById(R.id.error_image);
+            errorIV.setImageResource(R.drawable.no_event);
+
+            TextView errorTitle = (TextView) itemView.findViewById(R.id.error_title);
+            errorTitle.setText("Nie można połączyć się z serwerem");
+
+            TextView errorDescription = (TextView) itemView.findViewById(R.id.error_description);
+            errorDescription.setText("Spokojnie, to nie jest powód do paniki. Prawdopodobnie wyszedł na miasto przeglądając listę dostępnych imprez (już raz tak zrobił).\nSpróbuj połączyć się za chwilę.");
+        }
+
 
         return new MyViewHolder(itemView);
     }

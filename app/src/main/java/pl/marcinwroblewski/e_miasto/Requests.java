@@ -19,7 +19,8 @@ import java.net.URL;
 public class Requests {
 
 	private String login, password;
-	private static final String API_URL = "http://188.137.38.116:5000/api";
+	public static final String SERVER_URL = "188.137.38.116";
+	public static final String API_URL = "http://188.137.38.116:5000/api";
 	
 	public Requests(String login, String password) {
 		this.login = login;
@@ -250,7 +251,7 @@ public class Requests {
 		    //Get Response  
 		    InputStream is = connection.getInputStream();
 		    BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-		    StringBuilder response = new StringBuilder(); // or StringBuffer if Java version 5+
+		    StringBuilder response = new StringBuilder();
 		    String line;
 		    while ((line = rd.readLine()) != null) {
 		      response.append(line);
@@ -258,10 +259,10 @@ public class Requests {
 		    }
 		    rd.close();
 		    return response.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-		  	return String.valueOf(connection.getResponseCode());
-		} finally {
+		} catch (IOException e) {
+            e.printStackTrace();
+            return String.valueOf(connection.getResponseCode());
+        } finally {
 			if (connection != null) {
 				connection.disconnect();
 	    }

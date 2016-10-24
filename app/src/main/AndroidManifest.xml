@@ -22,7 +22,7 @@
         <activity android:name="com.tangxiaolv.telegramgallery.GalleryActivity" />
         <activity
             android:name=".Activities.EventDetailsActivity"
-            android:label="@string/title_activity_event_details"
+            android:label="Szczegóły wydarzenia"
             android:parentActivityName=".Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -32,7 +32,7 @@
         <activity android:name=".Activities.SettingsActivity" />
         <activity
             android:name=".Activities.ComplainDetailsActivity"
-            android:label="@string/title_activity_complain_details"
+            android:label="Szczegóły zgłoszenia"
             android:parentActivityName=".Activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -51,7 +51,7 @@
         </activity>
         <activity
             android:name=".Activities.RegisterActivity"
-            android:label="@string/title_activity_register"
+            android:label="Stwórz konto"
             android:parentActivityName=".Activities.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

@@ -1,6 +1,7 @@
 package pl.marcinwroblewski.e_miasto;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,8 +30,10 @@ public class JSONTo {
             JSONObject eventJSON = array.getJSONObject(i);
 
             Set<String> interests = new HashSet<>();
-            for(int j = 0; j < eventJSON.getJSONArray("interests").length() - 1; j++) {
-                JSONObject interestJSON = eventJSON.getJSONArray("interests").getJSONObject(i);
+            JSONArray interestsJSON = eventJSON.getJSONArray("interests");
+            Log.d("interests", interestsJSON.toString() + " => " + interestsJSON.length());
+            for(int j = 0; j < interestsJSON.length(); j++) {
+                JSONObject interestJSON = interestsJSON.getJSONObject(j);
                 interests.add(interestJSON.getString("name"));
             }
             String imagePath = "";

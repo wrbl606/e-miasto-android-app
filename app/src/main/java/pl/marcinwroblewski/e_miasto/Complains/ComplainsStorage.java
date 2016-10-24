@@ -57,7 +57,7 @@ public class ComplainsStorage {
                 complainJSON.getString("content"),
                 complainJSON.getString("imagePath"),
                 complainJSON.getBoolean("accepted"),
-                complainJSON.getString("dateCreated").substring(0, 9),
+                complainJSON.getString("dateCreated").substring(0, 10),
                 complainJSON.getString("dateSolved")
         );
         return complain;

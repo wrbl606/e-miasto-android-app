@@ -28,7 +28,7 @@
                     android:id="@+id/event_main_image"
                     android:layout_width="match_parent"
                     android:layout_height="240dp"
-                    android:src="@drawable/jbie"
+                    android:src="@drawable/no_photo"
                     android:scaleType="centerCrop"/>
 
                 <TextView

@@ -134,25 +134,26 @@ public class SendComplainFragment extends Fragment implements LocationListener {
     }
 
     void tryToRegisterLocationListener() {
-        if(locationManager != null) {
-            Log.e("Location Manager", "was null!");
-            return;
-        }
 
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                     1337);
         } else {
-            if(locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-                useLocation = true;
-            } else if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-                useLocation = true;
-            } else {
-                locationManager = null;
-                useLocation = false;
+            try {
+                if(locationManager.getAllProviders().contains(LocationManager.GPS_PROVIDER)) {
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+                    useLocation = true;
+                } else if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER)) {
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+                    useLocation = true;
+                } else {
+                    locationManager = null;
+                    useLocation = false;
+                }
+            } catch (NullPointerException e) {
+                Log.e("Location Manager", "was null");
+                e.printStackTrace();
             }
         }
     }
@@ -340,12 +341,18 @@ public class SendComplainFragment extends Fragment implements LocationListener {
                 Log.d("All complains", allComplainsResponse);
                 JSONArray complainsJSON = new JSONArray(allComplainsResponse);
                 complainsArrayList = JSONTo.complains(getContext(), complainsJSON);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showComplains();
-                    }
-                });
+                try {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showComplains();
+                        }
+                    });
+                } catch (NullPointerException e) {
+                    Log.e("AsyncTask", "getActivity() returned null");
+                    e.printStackTrace();
+                    return null;
+                }
             } catch (JSONException | IOException e) {
                 final String finalAllComplainsResponse = allComplainsResponse;
                 getActivity().runOnUiThread(new Runnable() {
@@ -356,9 +363,6 @@ public class SendComplainFragment extends Fragment implements LocationListener {
                 });
                 e.printStackTrace();
             }
-
-
-
             return null;
         }
     }
