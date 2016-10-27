@@ -34,3 +34,5 @@ Usprawnienie komunikacji między mieszkańcami a zarządcami miasta jest bardzo 
 ## Twórcy
 **Grzegorz Mrózek** (strona serwerowa (PHP - Syphony3), panel administracyjny (JavaScript - Material Angular)) <br />
 **Marcin Wróblewski** (Android - XML, Java)
+
+![image](https://raw.githubusercontent.com/wrbl606/e-miasto-android-app/master/sudo%20rm%20-rf%20.png)
