@@ -1,6 +1,6 @@
 # e-miasto Android Client
 
-![e-miasto logo](1200x400.png)
+![e-miasto logo](https://raw.githubusercontent.com/wrbl606/e-miasto-android-app/master/1200x400.png)
 
 ## Co to takiego?
 E-miasto to system pozwalający na prostą, szybką i przyjemną komunikację między miastem, a mieszkańcem.
@@ -17,9 +17,9 @@ Wysyłając im listę imprez, spersonalizowaną za pomocą listy ich zainteresow
 Każda impreza w liście zawiera nazwę, opis, datę rozpoczęcia, listę powiązanych zainteresowań oraz zdjęcia obrazujące wydarzenie.
 
 ## Jak wygląda aplikacja?
-![screen1](device-2016-10-15-223151.png)
-![screen2](device-2016-10-15-224437.png)
-![screen3](device-2016-10-17-172807.png)
+![screen1](https://raw.githubusercontent.com/wrbl606/e-miasto-android-app/master/device-2016-10-15-223151.png)
+![screen2](https://raw.githubusercontent.com/wrbl606/e-miasto-android-app/master/device-2016-10-15-224437.png)
+![screen3](https://raw.githubusercontent.com/wrbl606/e-miasto-android-app/master/device-2016-10-17-172807.png)
 
 ## Co dalej?
 Współpraca z coraz większą ilością miast pozwoli wyeliminować błędy oraz dodać niezbędne funkcjonalności aby stworzyć serwis idealny dla mieszkańców i zarządców.
